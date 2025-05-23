@@ -57,12 +57,14 @@ async function createLead(data) {
 }
 app.get('/', (req, res) => {
   res.send('Webhook server is running!');
+  console.log('Received from Dialogflow:', req.body.queryResult.parameters);
 });
 
 
 app.post('/webhook', async (req, res) => {
   const params = req.body.queryResult?.parameters;
   console.log("🌐 Received Dialogflow request:", JSON.stringify(req.body, null, 2));
+  console.log('Received from Dialogflow:', req.body.queryResult.parameters);
 
   try {
     if (!accessToken) {
