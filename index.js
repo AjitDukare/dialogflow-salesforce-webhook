@@ -58,6 +58,7 @@ async function createLead(data) {
 
 app.post('/webhook', async (req, res) => {
   const params = req.body.queryResult.parameters;
+  console.log("Received Dialogflow request:", JSON.stringify(req.body, null, 2));
 
   try {
     if (!accessToken) {
