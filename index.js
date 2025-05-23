@@ -55,29 +55,38 @@ async function createLead(data) {
 
   return response.data;
 }
+app.get('/', (req, res) => {
+  res.send('Webhook server is running!');
+});
+
 
 app.post('/webhook', async (req, res) => {
-  const params = req.body.queryResult.parameters;
-  console.log("Received Dialogflow request:", JSON.stringify(req.body, null, 2));
+  const params = req.body.queryResult?.parameters;
+  console.log("🌐 Received Dialogflow request:", JSON.stringify(req.body, null, 2));
 
   try {
     if (!accessToken) {
+      console.log("🔐 Authenticating with Salesforce...");
       await authenticateWithSalesforce();
+      console.log("✅ Auth success");
     }
 
+    console.log("📥 Creating lead with params:", params);
     await createLead(params);
+    console.log("✅ Lead created");
 
     res.json({
       fulfillmentText: `Thanks ${params.name}, your demo is scheduled for ${params.date}. We'll contact you soon!`
     });
 
   } catch (error) {
-    console.error('Error:', error.response ? error.response.data : error.message);
+    console.error('🔥 Error:', error.response ? error.response.data : error.message);
     res.json({
       fulfillmentText: 'Something went wrong. Please try again later.'
     });
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 
