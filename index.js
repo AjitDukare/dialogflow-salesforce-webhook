@@ -88,7 +88,10 @@ app.post('/webhook', async (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
+if (!PORT) {
+  throw new Error("❌ process.env.PORT is not defined. Render needs it to expose the service.");
+}
 
 app.listen(PORT, () => {
   console.log(`Webhook running on port ${PORT}`);
