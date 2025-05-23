@@ -10,7 +10,7 @@ const SF_LOGIN_URL = 'https://login.salesforce.com';
 const CLIENT_ID = '3MVG9GCMQoQ6rpzSn4.KKeYwDDMPwPmoYvIPRK6rFT_3gSW9OefVYigvvjh7ZJIr6mP8YyMzxkpM6j9IECokS';
 const CLIENT_SECRET = 'B98C05B4A353E32ACFB2BA82CB12489EB4101DFE69E7B17B379C0EFD61C762B9';
 const USERNAME = 'ajitdukare@nandupg.com';
-const PASSWORD = 'Ajit1997@@22YDfiEcQkMus1dYKLBs0CgFf';
+const PASSWORD = 'Ajit1997@@sxoCkRH3UzQScdyF5KqKpxPT';
 
 let accessToken = '';
 let instanceUrl = '';
