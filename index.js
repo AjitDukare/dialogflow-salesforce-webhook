@@ -7,10 +7,10 @@ app.use(bodyParser.json());
 
 
 const SF_LOGIN_URL = 'https://login.salesforce.com';
-const CLIENT_ID = '3MVG9GCMQoQ6rpzSn4.KKeYwDDMPwPmoYvIPRK6rFT_3gSW9OefVYigvvjh7ZJIr6mP8YyMzxkpM6j9IECokS';
-const CLIENT_SECRET = 'B98C05B4A353E32ACFB2BA82CB12489EB4101DFE69E7B17B379C0EFD61C762B9';
+const CLIENT_ID = '3MVG9GCMQoQ6rpzSn4.KKeYwDDDvP_3LKd6BxVAVq3Ml32.YUF3x7_7E5fv4BiHXdRWu_JdhvFmxkcIbwE5ke';
+const CLIENT_SECRET = 'B0141FAEE2690156A27C506D62782F59C9DF4518B3F5FE3C92CED7741E33D95B';
 const USERNAME = 'ajitdukare@nandupg.com';
-const PASSWORD = 'Ajit1997@@sxoCkRH3UzQScdyF5KqKpxPT';
+const PASSWORD = 'Ajit1997@@qV3x65Shz8ow4m2GMezK32MZf';
 
 let accessToken = '';
 let instanceUrl = '';
