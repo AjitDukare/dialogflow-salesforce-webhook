@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const qs = require('qs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -23,15 +24,19 @@ async function authenticateWithSalesforce() {
     console.log('USERNAME:', USERNAME);
     console.log('PASSWORD:', PASSWORD);
 
-    const response = await axios.post(`${SF_LOGIN_URL}/services/oauth2/token`, null, {
-      params: {
-        grant_type: 'password',
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        username: USERNAME,
-        password: PASSWORD
+    const response = await axios.post(`${SF_LOGIN_URL}/services/oauth2/token`,qs.stringify({
+      grant_type: 'password',
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      username: USERNAME,
+      password: PASSWORD
+    }),
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
-    });
+    }
+  );
 
     accessToken = response.data.access_token;
     instanceUrl = response.data.instance_url;
