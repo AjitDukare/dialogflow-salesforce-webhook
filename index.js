@@ -1,10 +1,10 @@
 const express = require('express');
-const axios = require('axios');
+/*const axios = require('axios');*/
 const bodyParser = require('body-parser');
 
 const app = express();
 app.use(bodyParser.json());
-
+/*
 const SF_LOGIN_URL = 'https://login.salesforce.com';
 const CLIENT_ID = '3MVG9GCMQoQ6rpzSn4.KKeYwDDNojuQ98hCibJ3PurCg83ej_hka1_IzEMlzwGB9P9Hx5EuOBaggHSXZblk.k';
 const CLIENT_SECRET = '0AD980F32A557EE511527FDCD1E40C6D2A4219575ACB08374DA12F6E345E6BAF';
@@ -12,34 +12,48 @@ const USERNAME = 'ajitdukare@nandupg.com';
 const PASSWORD = 'Ajit1997@@eQHbjKVXFQ67nd9xbA7sWisw';
 
 let accessToken = '';
-let instanceUrl = '';
+let instanceUrl = ''; */
 
+
+const qs = require('qs');
 
 async function authenticateWithSalesforce() {
   console.log('🔐 Starting Salesforce authentication...');
-  console.log('👤 Username:', USERNAME);
+  console.log("🔐 Environment Variables:");
+  console.log("🟢 CLIENT_ID:", CLIENT_ID);
+  console.log("🟢 CLIENT_SECRET (masked):", CLIENT_SECRET?.slice(0, 6) + '...');
+  console.log("🟢 USERNAME:", USERNAME);
+  console.log("🟢 PASSWORD (masked):", PASSWORD?.slice(0, 6) + '...');
+
   try {
-    const response = await axios.post(`${SF_LOGIN_URL}/services/oauth2/token`, null, {
-      params: {
-        grant_type: 'password',
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        username: USERNAME,
-        password: PASSWORD
+    const tokenUrl = `${SF_LOGIN_URL}/services/oauth2/token`;
+    const payload = qs.stringify({
+      grant_type: 'password',
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      username: USERNAME,
+      password: PASSWORD
+    });
+
+    console.log("🔁 Sending auth request to:", tokenUrl);
+    console.log("📦 Payload:", payload);
+
+    const response = await qs.post(tokenUrl, payload, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
-     console.log('✅ Raw Salesforce response:', response.data);
 
-    if (response.data.access_token) {
-      accessToken = response.data.access_token;
-      instanceUrl = response.data.instance_url;
-      console.log('✅ Authenticated. Instance URL:', instanceUrl);
-      console.log('🔓 Access Token:', accessToken.slice(0, 10) + '... (masked)');
-    } else {
-      console.error('❌ No access token received from Salesforce!');
-    }
+    console.log('✅ Response from Salesforce:', response.data);
+
+    accessToken = response.data.access_token;
+    instanceUrl = response.data.instance_url;
+
+    console.log('✅ Access Token (masked):', accessToken?.slice(0, 10));
+    console.log('✅ Instance URL:', instanceUrl);
+
   } catch (err) {
-     console.error('❌ Authentication failed!');
+    console.error('❌ Authentication failed!');
     console.error('Error details:', err.response?.data || err.message);
     throw err;
   }
@@ -59,7 +73,7 @@ async function createLead(data) {
 
   console.log('Payload to Salesforce:', leadData);
 
-  const response = await axios.post(
+  const response = await qs.post(
     `${instanceUrl}/services/data/v58.0/sobjects/Lead/`,
     leadData,
     {
