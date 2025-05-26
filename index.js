@@ -14,9 +14,7 @@ const PASSWORD = 'Ajit1997@@eQHbjKVXFQ67nd9xbA7sWisw';
 let accessToken = '';
 let instanceUrl = '';
 
-/**
- * Authenticate with Salesforce using OAuth 2.0 Username-Password Flow
- */
+
 async function authenticateWithSalesforce() {
   try {
     console.log('Starting Salesforce authentication...');
@@ -37,6 +35,8 @@ async function authenticateWithSalesforce() {
 
     accessToken = response.data.access_token;
     instanceUrl = response.data.instance_url;
+    console.log('accessToken is :', accessToken);
+    console.log('instanceUrl is :', instanceUrl);
 
     console.log('Authenticated successfully!');
     console.log('Access Token:', accessToken ? accessToken.slice(0, 10) + '... (masked)' : 'Not received');
@@ -47,9 +47,9 @@ async function authenticateWithSalesforce() {
     console.error('Params:', {
       grant_type: 'password',
       client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET.slice(0, 5) + '... (masked)',
+      client_secret: CLIENT_SECRET,
       username: USERNAME,
-      password: PASSWORD.slice(0, 5) + '... (masked)'
+      password: PASSWORD
     });
     console.error('Error response:', err.response?.data || err.message);
     throw err;
