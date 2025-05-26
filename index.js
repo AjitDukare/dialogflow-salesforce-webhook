@@ -16,47 +16,34 @@ let accessToken = '';
 let instanceUrl = '';
 
 
-async function authenticateWithSalesforce() {
+  async function authenticateWithSalesforce() {
   try {
     console.log('Starting Salesforce authentication...');
-    console.log('CLIENT_ID:', CLIENT_ID);
-    console.log('CLIENT_SECRET:', CLIENT_SECRET);
-    console.log('USERNAME:', USERNAME);
-    console.log('PASSWORD:', PASSWORD);
+    console.log('CLIENT_ID:', process.env.CLIENT_ID);
+    console.log('CLIENT_ID length:', process.env.CLIENT_ID?.length);
 
-    const response = await axios.post(`${SF_LOGIN_URL}/services/oauth2/token`,qs.stringify({
-      grant_type: 'password',
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      username: USERNAME,
-      password: PASSWORD
-    }),
-    {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    const response = await axios.post(
+      'https://login.salesforce.com/services/oauth2/token',
+      qs.stringify({
+        grant_type: 'password',
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }
-    }
-  );
-
+    );
     accessToken = response.data.access_token;
     instanceUrl = response.data.instance_url;
-    console.log('accessToken is :', accessToken);
-    console.log('instanceUrl is :', instanceUrl);
-
     console.log('Authenticated successfully!');
-    console.log('Access Token:', accessToken ? accessToken.slice(0, 10) + '... (masked)' : 'Not received');
-    console.log('Instance URL:', instanceUrl);
   } catch (err) {
     console.error('Authentication failed!');
-    console.error('Request sent to:', `${SF_LOGIN_URL}/services/oauth2/token`);
-    console.error('Params:', {
-      grant_type: 'password',
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      username: USERNAME,
-      password: PASSWORD
-    });
     console.error('Error response new:', err.response?.data || err.message);
+     console.error('Error response new21:', err.response?.data && err.message);
     throw err;
   }
 }
