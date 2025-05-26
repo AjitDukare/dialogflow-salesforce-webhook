@@ -51,7 +51,7 @@ async function authenticateWithSalesforce() {
       username: USERNAME,
       password: PASSWORD
     });
-    console.error('Error response:', err.response?.data || err.message);
+    console.error('Error response new:', err.response?.data || err.message);
     throw err;
   }
 }
@@ -92,10 +92,12 @@ app.get('/', (req, res) => {
 
 app.post('/webhook', async (req, res) => {
   const params = req.body.queryResult?.parameters;
-  console.log('Received Dialogflow request:', JSON.stringify(req.body, null, 2));
+  console.log('Received Dialogflow request new:', JSON.stringify(req.body, null, 2));
+  
 
   try {
     if (!accessToken) {
+       console.log('accessToken is new :', accessToken);
       console.log('No access token found. Authenticating...');
       await authenticateWithSalesforce();
       console.log('Auth success');
