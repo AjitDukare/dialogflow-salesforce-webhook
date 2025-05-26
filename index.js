@@ -11,18 +11,14 @@ const CLIENT_SECRET = '0AD980F32A557EE511527FDCD1E40C6D2A4219575ACB08374DA12F6E3
 const USERNAME = 'ajitdukare@nandupg.com';
 const PASSWORD = 'Ajit1997@@eQHbjKVXFQ67nd9xbA7sWisw';
 
-let accessToken = '00DdL00000JnMNr!AQEAQIhRAfMxiYOhpWWaQOxMfcb5Gc_.MWBfF1si3AWrbmghHfBTxBG8nO_NB7yAWA5Vk1bzUs9a2A3RZIlcVbmVE73LgNHK';
+let accessToken = '';
 let instanceUrl = '';
 
 
 async function authenticateWithSalesforce() {
+  console.log('🔐 Starting Salesforce authentication...');
+  console.log('👤 Username:', USERNAME);
   try {
-    console.log('Starting Salesforce authentication...');
-    console.log('CLIENT_ID:', CLIENT_ID);
-    console.log('CLIENT_SECRET:', CLIENT_SECRET);
-    console.log('USERNAME:', USERNAME);
-    console.log('PASSWORD:', PASSWORD);
-
     const response = await axios.post(`${SF_LOGIN_URL}/services/oauth2/token`, null, {
       params: {
         grant_type: 'password',
@@ -32,26 +28,19 @@ async function authenticateWithSalesforce() {
         password: PASSWORD
       }
     });
+     console.log('✅ Raw Salesforce response:', response.data);
 
-    /*accessToken = response.data.access_token; */
-    instanceUrl = response.data.instance_url;
-    console.log('accessToken is :', accessToken);
-    console.log('instanceUrl is :', instanceUrl);
-
-    console.log('Authenticated successfully!');
-    console.log('Access Token:', accessToken ? accessToken.slice(0, 10) + '... (masked)' : 'Not received');
-    console.log('Instance URL:', instanceUrl);
+    if (response.data.access_token) {
+      accessToken = response.data.access_token;
+      instanceUrl = response.data.instance_url;
+      console.log('✅ Authenticated. Instance URL:', instanceUrl);
+      console.log('🔓 Access Token:', accessToken.slice(0, 10) + '... (masked)');
+    } else {
+      console.error('❌ No access token received from Salesforce!');
+    }
   } catch (err) {
-    console.error('Authentication failed!');
-    console.error('Request sent to:', `${SF_LOGIN_URL}/services/oauth2/token`);
-    console.error('Params:', {
-      grant_type: 'password',
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      username: USERNAME,
-      password: PASSWORD
-    });
-    console.error('Error response new:', err.response?.data || err.message);
+     console.error('❌ Authentication failed!');
+    console.error('Error details:', err.response?.data || err.message);
     throw err;
   }
 }
