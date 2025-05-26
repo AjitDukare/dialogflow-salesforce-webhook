@@ -11,7 +11,7 @@ const CLIENT_SECRET = '0AD980F32A557EE511527FDCD1E40C6D2A4219575ACB08374DA12F6E3
 const USERNAME = 'ajitdukare@nandupg.com';
 const PASSWORD = 'Ajit1997@@eQHbjKVXFQ67nd9xbA7sWisw';
 
-let accessToken = '';
+let accessToken = '00DdL00000JnMNr!AQEAQIhRAfMxiYOhpWWaQOxMfcb5Gc_.MWBfF1si3AWrbmghHfBTxBG8nO_NB7yAWA5Vk1bzUs9a2A3RZIlcVbmVE73LgNHK';
 let instanceUrl = '';
 
 
@@ -33,7 +33,7 @@ async function authenticateWithSalesforce() {
       }
     });
 
-    accessToken = response.data.access_token;
+    /*accessToken = response.data.access_token; */
     instanceUrl = response.data.instance_url;
     console.log('accessToken is :', accessToken);
     console.log('instanceUrl is :', instanceUrl);
