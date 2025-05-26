@@ -38,7 +38,9 @@ let instanceUrl = '';
       }
     );
     accessToken = response.data.access_token;
+    console.log('Access token is :', accessToken);
     instanceUrl = response.data.instance_url;
+    console.log('instanceUrl is :', instanceUrl);
     console.log('Authenticated successfully!');
   } catch (err) {
     console.error('Authentication failed!');
