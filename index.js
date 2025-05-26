@@ -48,34 +48,40 @@ let instanceUrl = '';
   }
 }
 
-async function createLead(data) {
-  console.log('Creating Lead with data:', data);
+  async function createLead(data) {
+  const fullName = typeof data.name === 'string' ? data.name : data.name.name;
+  const [firstName, lastName] = fullName.split(' ');
 
   const leadData = {
-    FirstName: data.name.split(' ')[0],
-    LastName: data.name.split(' ').slice(1).join(' ') || 'Demo',
-    Company: 'Demo Booking',
+    FirstName: firstName || '',
+    LastName: lastName || '',
     Email: data.email,
     Phone: data.phone,
-    Description: `Demo requested for ${data.date}`
+    Company: `${firstName || 'Test'} ${lastName || 'Lead'}` // Salesforce requires Company for B2B leads
   };
 
-  console.log('Payload to Salesforce:', leadData);
+  console.log('Creating Lead with data:', leadData);
 
-  const response = await axios.post(
-    `${instanceUrl}/services/data/v58.0/sobjects/Lead/`,
-    leadData,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+  try {
+    const response = await axios.post(
+      `${instanceUrl}/services/data/v58.0/sobjects/Lead`,
+      leadData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
       }
-    }
-  );
+    );
 
-  console.log('Lead created successfully:', response.data);
-  return response.data;
+    console.log('Lead created successfully!');
+    return response.data;
+  } catch (err) {
+    console.error('Error creating Lead:', err.response?.data || err.message);
+    throw err;
+  }
 }
+
 
 app.get('/', (req, res) => {
   res.send('Webhook server is running!');
