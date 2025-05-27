@@ -7,10 +7,10 @@ const app = express();
 app.use(bodyParser.json());
 
 const SF_LOGIN_URL = 'https://login.salesforce.com';
-const CLIENT_ID = '3MVG9GCMQoQ6rpzSn4.KKeYwDDNojuQ98hCibJ3PurCg83ej_hka1_IzEMlzwGB9P9Hx5EuOBaggHSXZblk.k';
+/*   const CLIENT_ID = '3MVG9GCMQoQ6rpzSn4.KKeYwDDNojuQ98hCibJ3PurCg83ej_hka1_IzEMlzwGB9P9Hx5EuOBaggHSXZblk.k';
 const CLIENT_SECRET = '0AD980F32A557EE511527FDCD1E40C6D2A4219575ACB08374DA12F6E345E6BAF';
 const USERNAME = 'ajitdukare@nandupg.com';
-const PASSWORD = 'Ajit1997@@eQHbjKVXFQ67nd9xbA7sWisw';
+const PASSWORD = 'Ajit1997@@eQHbjKVXFQ67nd9xbA7sWisw';    */
 
 let accessToken = '';
 let instanceUrl = '';
@@ -52,16 +52,26 @@ let instanceUrl = '';
 
   async function createLead(data) {
   const fullName = typeof data.name === 'string' ? data.name : data.name.name;
-  const [firstName, lastName] = fullName.split(' ');
+const nameParts = fullName.trim().split(' ');
+
+// If only one word is provided, treat it as the LastName
+let firstName = '';
+let lastName = '';
+
+if (nameParts.length === 1) {
+  lastName = nameParts[0];
+} else {
+  firstName = nameParts[0];
+  lastName = nameParts.slice(1).join(' ');
+}
 
   const leadData = {
-    FirstName: firstName || '',
-    LastName: lastName || '',
-    Email: data.email,
-    Phone: data.phone,
-    Company: `${firstName || 'Test'} ${lastName || 'Lead'}` // Salesforce requires Company for B2B leads
-  };
-
+  FirstName: firstName,
+  LastName: lastName,
+  Email: data.email,
+  Phone: data.phone,
+  Company: `${lastName} Individual` 
+};
   console.log('Creating Lead with data:', leadData);
 
   try {
