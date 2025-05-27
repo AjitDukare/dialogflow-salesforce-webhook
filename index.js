@@ -54,7 +54,6 @@ let instanceUrl = '';
   const fullName = typeof data.name === 'string' ? data.name : data.name.name;
 const nameParts = fullName.trim().split(' ');
 
-// If only one word is provided, treat it as the LastName
 let firstName = '';
 let lastName = '';
 
@@ -119,8 +118,11 @@ app.post('/webhook', async (req, res) => {
     await createLead(params);
     console.log('Lead creation completed');
 
+    const nameStr = typeof params.name === 'string' ? params.name : params.name.name;
+    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${params.date}. We'll contact you soon!`;
+
     res.json({
-      fulfillmentText: `Thanks ${params.name}, your demo is scheduled for ${params.date}. We'll contact you soon!`
+      fulfillmentText: fulfillmentText,
     });
 
   } catch (error) {
