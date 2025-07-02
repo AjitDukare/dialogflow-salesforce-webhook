@@ -116,9 +116,9 @@ app.post("/webhook", async (req, res) => {
     console.log("Lead creation completed");
     const nameStr =
       typeof params.name === "string" ? params.name : params.name.name;
-      const isoDateTime = data.date;               
-      const dateOnly     = isoDateTime.split("T")[0];
-    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${dateOnly}. We'll contact you soon!`;
+      const description = `Demo Date: ${params.date}`;
+      
+    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${description}. We'll contact you soon!`;
     res.json({
       fulfillmentText: fulfillmentText,
     });
