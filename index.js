@@ -59,11 +59,13 @@ async function createLead(data) {
     firstName = nameParts[0];
     lastName = nameParts.slice(1).join(" ");
   }
+  const isoDateTime = data.date;               // e.g. "2026-06-12T12:00:00+05:30"
+  const dateOnly     = isoDateTime.split("T")[0];
   const leadData = {
     FirstName: firstName,
     LastName: lastName,
     Email: data.email,
-    Description: `Demo Date: ${data.date}`,
+    Description: `Demo Date: ${dateOnly}`,
     Company: `${lastName} Individual`
   };
   console.log("Creating Lead with data:", leadData);
@@ -114,8 +116,9 @@ app.post("/webhook", async (req, res) => {
     console.log("Lead creation completed");
     const nameStr =
       typeof params.name === "string" ? params.name : params.name.name;
-      const description = `Demo Date: ${params.date}`;
-    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${description}. We'll contact you soon!`;
+      const isoDateTime = data.date;               
+      const dateOnly     = isoDateTime.split("T")[0];
+    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${dateOnly}. We'll contact you soon!`;
     res.json({
       fulfillmentText: fulfillmentText,
     });
