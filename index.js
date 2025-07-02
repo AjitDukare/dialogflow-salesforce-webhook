@@ -21,23 +21,23 @@ async function authenticateWithSalesforce() {
     const response = await axios.post(
       "https://login.salesforce.com/services/oauth2/token",
       qs.stringify({
-      grant_type: "password",
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      username: process.env.USERNAME,
-      password: process.env.PASSWORD,
-    }),
+        grant_type: "password",
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        username: process.env.USERNAME,
+        password: process.env.PASSWORD,
+      }),
 
-    {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    }
-  );
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
 
-  accessToken = response.data.access_token;
-  console.log("Access token is :", accessToken);
-  instanceUrl = response.data.instance_url;
+    accessToken = response.data.access_token;
+    console.log("Access token is :", accessToken);
+    instanceUrl = response.data.instance_url;
     console.log("instanceUrl is :", instanceUrl);
     console.log("Authenticated successfully!");
   } catch (err) {
@@ -63,8 +63,8 @@ async function createLead(data) {
     FirstName: firstName,
     LastName: lastName,
     Email: data.email,
-    Phone: data.phone,
-    Company: `${lastName} Individual`,
+    Description: `Demo Date: ${data.date}`,
+    Company: `${lastName} Individual`
   };
   console.log("Creating Lead with data:", leadData);
   try {
@@ -109,12 +109,13 @@ app.post("/webhook", async (req, res) => {
       console.log("Reusing existing access token.");
     }
     console.log("Creating lead with params:", params);
-    
+
     await createLead(params);
     console.log("Lead creation completed");
     const nameStr =
       typeof params.name === "string" ? params.name : params.name.name;
-    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${params.date}. We'll contact you soon!`;
+      const description = `Demo Date: ${params.date}`;
+    const fulfillmentText = `Thanks ${nameStr}, your demo is scheduled for ${description}. We'll contact you soon!`;
     res.json({
       fulfillmentText: fulfillmentText,
     });
